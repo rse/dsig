@@ -49,12 +49,12 @@ Usage
 (Sample)
 
 ```sh
-dsig keygen "Dr. Ralf S. Engelschall" "rse@engelschall.com" secure sample.prv sample.pub
-dsig fingerprint sample.prv secure
-dsig fingerprint sample.pub >sample.fpr
-echo "Foo Bar Quux" >sample.txt
-dsig sign sample.txt sample.sig sample.prv secure Foo=Bar Baz=Quux
-dsig verify sample.txt sample.sig sample.pub "`cat sample.fpr`"
+$ dsig keygen "Dr. Ralf S. Engelschall" "rse@engelschall.com" secure sample.prv sample.pub
+$ dsig fingerprint sample.prv secure
+$ dsig fingerprint sample.pub >sample.fpr
+$ echo "Foo Bar Quux" >sample.txt
+$ dsig sign sample.txt sample.sig sample.prv secure Foo=Bar Baz=Quux
+$ dsig verify sample.txt sample.sig sample.pub "`cat sample.fpr`"
 ```
 
 ### Application Programming Interface (API)

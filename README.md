@@ -87,7 +87,7 @@ declare module "DSIG" {
             payload:            string|Buffer,               /*  payload to sign  */
             privateKey:         string,                      /*  private key  */
             passPhrase:         string,                      /*  pass-phrase of private key  */
-            metaInfo?:          { [ key: string ]: string }, /*  meta information (key/value pairs)  */
+            metaInfo?:          string,                      /*  optional meta information  */
         ): Promise<{
             signature:          string                       /*  signature  */
         }>;
@@ -99,7 +99,7 @@ declare module "DSIG" {
             publicKey:          string,                      /*  public key  */
             fingerPrint:        string                       /*  finger-print of public/private key  */
         ): Promise <{
-            metaInfo:           { [ key: string ]: string }  /*  meta information (key/value pairs)  */
+            metaInfo:           string                       /*  optional meta information  */
         }>;
     }
     export = DSIG

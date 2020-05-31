@@ -15,7 +15,7 @@ About
 
 DSIG (Digital Signature) is a JavaScript Application Programming
 Interface (API) and Command-Line Interface (CLI) for generating an
-[OpenPGP]((https://www.ietf.org/rfc/rfc4880.txt) public/private key
+[OpenPGP](https://www.ietf.org/rfc/rfc4880.txt) public/private key
 pair, calculating the fingerprint of the public/private key, signing a
 payload with the private key and verifying the payload afterwards with
 the public key and the fingerprint. It is especially intended to sign

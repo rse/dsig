@@ -15,11 +15,11 @@ About
 
 DSIG (Digital Signature) is a JavaScript Application Programming
 Interface (API) and Command-Line Interface (CLI) for generating an
-OpenPGP public/private key pair, calculating the fingerprint of the
-public/private key, signing a payload with the private key and verifying
-the payload afterwards with the public key and the fingerprint. It
-is especially intended to sign application licenses and application
-distribution archives.
+[OpenPGP]((https://www.ietf.org/rfc/rfc4880.txt) public/private key
+pair, calculating the fingerprint of the public/private key, signing a
+payload with the private key and verifying the payload afterwards with
+the public key and the fingerprint. It is especially intended to sign
+application license files and application distribution archive files.
 
 The crux of DSIG is:
 
@@ -44,6 +44,10 @@ $ npm install [-g] dsig
 Usage
 -----
 
+### Command-Line Interface
+
+(Sample)
+
 ```sh
 dsig keygen "Dr. Ralf S. Engelschall" "rse@engelschall.com" secure sample.prv sample.pub
 dsig fingerprint sample.prv secure
@@ -52,6 +56,10 @@ echo "Foo Bar Quux" >sample.txt
 dsig sign sample.txt sample.sig sample.prv secure Foo=Bar Baz=Quux
 dsig verify sample.txt sample.sig sample.pub "`cat sample.fpr`"
 ```
+
+### Application Programming Interface (API)
+
+(TypeScript Definition)
 
 ```ts
 declare module "DSIG" {

@@ -39,6 +39,7 @@ Installation
 
 ```shell
 $ npm install [-g] dsig
+```
 
 Example
 -------

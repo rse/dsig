@@ -109,6 +109,6 @@ declare module "DSIG" {
 License
 -------
 
-Copyright (c) 2015-2020 [Dr. Ralf S. Engelschall](http://engelschall.com/)<br/>
+Copyright &copy; 2015-2020 [Dr. Ralf S. Engelschall](http://engelschall.com/)<br/>
 Licensed under [LGPL 3.0](https://spdx.org/licenses/LGPL-3.0-only)
 

@@ -39,6 +39,85 @@ Installation
 
 ```shell
 $ npm install [-g] dsig
+
+Example
+-------
+
+```sh
+$ dsig keygen "Dr. Ralf S. Engelschall" "rse@engelschall.com" secure sample.prv sample.pub
+
+$ dsig fingerprint sample.prv secure
+CBA9-F53F-DC7E-F31A-EEC2-4B35-85A8-735F-6651-5FF1
+
+$ dsig fingerprint sample.pub >sample.fpr
+$ echo "Foo Bar Quux" >sample.txt
+$ (echo "Meta 1"; echo "Meta 2") >sample.inf
+
+$ dsig sign sample.txt sample.sig sample.prv secure sample.inf
+
+$ dsig verify sample.txt sample.sig sample.pub "`cat sample.fpr`"
+Meta 1
+Meta 2
+
+$ cat sample.txt sample.prv sample.pub sample.fpr sample.sig
+Foo Bar Quux
+-----BEGIN PGP PRIVATE KEY BLOCK-----
+Version: DSIG 1.0.0 OpenPGP Private Key
+Comment: Dr. Ralf S. Engelschall <rse@engelschall.com> [CBA9-F53F-DC7E-F31A-EEC2-4B35-85A8-735F-6651-5FF1]
+
+xYYEXtQ/FBYJKwYBBAHaRw8BAQdA6S++yiCv4YFCKXhiYBM1yefszTpHOM1C
+YcGq5LO0Brb+CQMIS4DXIhkdaNrgIeLqqCm+2IMkUx1J7Jgg1Erj933ZiEMB
+sNOewIyfv1anRJvOW001Gsu7M2q2gbqZL4orBDuJOBDgPUuXA6rXHWOmjGZf
+G80tRHIuIFJhbGYgUy4gRW5nZWxzY2hhbGwgPHJzZUBlbmdlbHNjaGFsbC5j
+b20+wngEEBYKACAFAl7UPxQGCwkHCAMCBBUICgIEFgIBAAIZAQIbAwIeAQAK
+CRCFqHNfZlFf8XDYAPwPoT8TkCHRfdfc2kwn2exkUCVjiaC0ExxQxlSOEwzA
+7AEAuvmgFRV2OhRGQk2YIFsvukGtH6v0XRH94Je+wpeqBA/HiwRe1D8UEgor
+BgEEAZdVAQUBAQdA5BlHVEWQV15Xo1gNAXSkaraKsmSYqkX7jH5MJV3tGg4D
+AQgH/gkDCGOmjqJZ9MWB4KQf9BXQ9eAm2bfov7sPIwdUvxkcn+th7cwbQE3o
+QPOWxSmx+oPQc6vc3mN5DJZiQcV0foRG0zn8HPO1RBe1mijAeC7/yXjCYQQY
+FggACQUCXtQ/FAIbDAAKCRCFqHNfZlFf8deIAQCUv/WL41TDMzb2IhbW+UNo
+tI+Fvt4NsMEhrgrFchjZBwD5AbPQBMSXtuBfmWU6faM1AEviSQxrtDVGtMWP
+2WDvlwU=
+=2StE
+-----END PGP PRIVATE KEY BLOCK-----
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: DSIG 1.0.0 OpenPGP Public Key
+Comment: Dr. Ralf S. Engelschall <rse@engelschall.com> [CBA9-F53F-DC7E-F31A-EEC2-4B35-85A8-735F-6651-5FF1]
+
+xjMEXtQ/FBYJKwYBBAHaRw8BAQdA6S++yiCv4YFCKXhiYBM1yefszTpHOM1C
+YcGq5LO0BrbNLURyLiBSYWxmIFMuIEVuZ2Vsc2NoYWxsIDxyc2VAZW5nZWxz
+Y2hhbGwuY29tPsJ4BBAWCgAgBQJe1D8UBgsJBwgDAgQVCAoCBBYCAQACGQEC
+GwMCHgEACgkQhahzX2ZRX/Fw2AD8D6E/E5Ah0X3X3NpMJ9nsZFAlY4mgtBMc
+UMZUjhMMwOwBALr5oBUVdjoURkJNmCBbL7pBrR+r9F0R/eCXvsKXqgQPzjgE
+XtQ/FBIKKwYBBAGXVQEFAQEHQOQZR1RFkFdeV6NYDQF0pGq2irJkmKpF+4x+
+TCVd7RoOAwEIB8JhBBgWCAAJBQJe1D8UAhsMAAoJEIWoc19mUV/x14gBAJS/
+9YvjVMMzNvYiFtb5Q2i0j4W+3g2wwSGuCsVyGNkHAPkBs9AExJe24F+ZZTp9
+ozUAS+JJDGu0NUa0xY/ZYO+XBQ==
+=viif
+-----END PGP PUBLIC KEY BLOCK-----
+CBA9-F53F-DC7E-F31A-EEC2-4B35-85A8-735F-6651-5FF1
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+DSIG-Issued: 2020-05-31T23:34:45.209Z
+DSIG-Length: 13
+DSIG-Digest:
+    AA37-BDA8-C70D-D1A9-95B2-94D4-DC33-295E-6B7F-405A-45D9-2232-996B-F7D3-48E6-08C0
+    D67E-2B65-F06A-0A32-1853-B2F1-A06E-16CE-E670-2517-70DC-6E7D-A082-3C0D-63F3-12FB
+
+Meta 1
+Meta 2
+
+-----BEGIN PGP SIGNATURE-----
+Version: DSIG 1.0.0 OpenPGP Digital Signature
+Comment: Dr. Ralf S. Engelschall <rse@engelschall.com> [CBA9-F53F-DC7E-F31A-EEC2-4B35-85A8-735F-6651-5FF1]
+
+wl4EARYKAAYFAl7UPxUACgkQhahzX2ZRX/GsvQEAxF7lY1QzmZ0SkEj3XoAM
+CYYpGcx2dkc9HFeJfRlxVl0BAJ2XZMVTQd8h/Lq3E3YKXhRY9LL0CXAqEdYr
+uRFu808I
+=yY7q
+-----END PGP SIGNATURE-----
+rm -f sample.*
 ```
 
 Usage
@@ -46,20 +125,14 @@ Usage
 
 ### Command-Line Interface
 
-(Sample)
-
 ```sh
-$ dsig keygen "Dr. Ralf S. Engelschall" "rse@engelschall.com" secure sample.prv sample.pub
-$ dsig fingerprint sample.prv secure
-$ dsig fingerprint sample.pub >sample.fpr
-$ echo "Foo Bar Quux" >sample.txt
-$ dsig sign sample.txt sample.sig sample.prv secure Foo=Bar Baz=Quux
-$ dsig verify sample.txt sample.sig sample.pub "`cat sample.fpr`"
+$ dsig keygen <user-name> <user-email> <pass-phase> <private-key-file> <public-key-file>
+$ dsig fingerprint { <private-key-file> <pass-phrase> | <public-key-file> }
+$ dsig sign <payload-file> <signature-file> <private-key-file> <pass-phrase> [<meta-info-file>]
+$ dsig verify <payload-file> <signature-file> <public-key-file> <finger-print>
 ```
 
 ### Application Programming Interface (API)
-
-(TypeScript Definition)
 
 ```ts
 declare module "DSIG" {

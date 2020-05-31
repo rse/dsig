@@ -5,7 +5,7 @@ DSIG
 Digital Signature with OpenPGP in JavaScript
 
 <p/>
-<img src="https://nodei.co/npm/disg.png?downloads=true&stars=true" alt=""/>
+<img src="https://nodei.co/npm/dsig.png?downloads=true&stars=true" alt=""/>
 
 <p/>
 <img src="https://david-dm.org/rse/dsig.png" alt=""/>

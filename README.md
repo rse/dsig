@@ -45,80 +45,73 @@ Example
 -------
 
 ```sh
+$ echo -n "Foo Bar Quux" >sample.txt
 $ dsig keygen "Dr. Ralf S. Engelschall" "rse@engelschall.com" secure sample.prv sample.pub
-
-$ dsig fingerprint sample.prv secure
-CBA9-F53F-DC7E-F31A-EEC2-4B35-85A8-735F-6651-5FF1
-
-$ dsig fingerprint sample.pub >sample.fpr
-$ echo "Foo Bar Quux" >sample.txt
-$ (echo "Meta 1"; echo "Meta 2") >sample.inf
-
-$ dsig sign sample.txt sample.sig sample.prv secure sample.inf
-
-$ dsig verify sample.txt sample.sig sample.pub "`cat sample.fpr`"
-Meta 1
-Meta 2
-
-$ cat sample.txt sample.prv sample.pub sample.fpr sample.sig
-Foo Bar Quux
+$ cat sample.prv sample.pub
 -----BEGIN PGP PRIVATE KEY BLOCK-----
 Version: DSIG 1.0.0 OpenPGP Private Key
-Comment: Dr. Ralf S. Engelschall <rse@engelschall.com> [CBA9-F53F-DC7E-F31A-EEC2-4B35-85A8-735F-6651-5FF1]
+Comment: Dr. Ralf S. Engelschall <rse@engelschall.com> [AFF1-333B-AE41-A464-9915-B442-2D6B-A3CD-4351-9428]
 
-xYYEXtQ/FBYJKwYBBAHaRw8BAQdA6S++yiCv4YFCKXhiYBM1yefszTpHOM1C
-YcGq5LO0Brb+CQMIS4DXIhkdaNrgIeLqqCm+2IMkUx1J7Jgg1Erj933ZiEMB
-sNOewIyfv1anRJvOW001Gsu7M2q2gbqZL4orBDuJOBDgPUuXA6rXHWOmjGZf
-G80tRHIuIFJhbGYgUy4gRW5nZWxzY2hhbGwgPHJzZUBlbmdlbHNjaGFsbC5j
-b20+wngEEBYKACAFAl7UPxQGCwkHCAMCBBUICgIEFgIBAAIZAQIbAwIeAQAK
-CRCFqHNfZlFf8XDYAPwPoT8TkCHRfdfc2kwn2exkUCVjiaC0ExxQxlSOEwzA
-7AEAuvmgFRV2OhRGQk2YIFsvukGtH6v0XRH94Je+wpeqBA/HiwRe1D8UEgor
-BgEEAZdVAQUBAQdA5BlHVEWQV15Xo1gNAXSkaraKsmSYqkX7jH5MJV3tGg4D
-AQgH/gkDCGOmjqJZ9MWB4KQf9BXQ9eAm2bfov7sPIwdUvxkcn+th7cwbQE3o
-QPOWxSmx+oPQc6vc3mN5DJZiQcV0foRG0zn8HPO1RBe1mijAeC7/yXjCYQQY
-FggACQUCXtQ/FAIbDAAKCRCFqHNfZlFf8deIAQCUv/WL41TDMzb2IhbW+UNo
-tI+Fvt4NsMEhrgrFchjZBwD5AbPQBMSXtuBfmWU6faM1AEviSQxrtDVGtMWP
-2WDvlwU=
-=2StE
+xYYEXtRAFhYJKwYBBAHaRw8BAQdADCSgVU5xTcOvXxKObmSh2yGMI3oB0oKD
+KFq6kO+DOQj+CQMIgnwtcLbFPpPgSKi5436kFmsfUMtjA7sqIA/FjumThc/u
+KnB4ruHU8TQ3XHfiD7KjBKButMGAkDnC5Kren9fSwAng+09U7EAhqC+jGweK
+Qc0tRHIuIFJhbGYgUy4gRW5nZWxzY2hhbGwgPHJzZUBlbmdlbHNjaGFsbC5j
+b20+wngEEBYKACAFAl7UQBYGCwkHCAMCBBUICgIEFgIBAAIZAQIbAwIeAQAK
+CRAta6PNQ1GUKGwwAP4hEj1Ououd4DhaZNG6RaJx5S5X3mMaR65LoVfnGsuJ
+EwD/RajtMVwkAnO8Jj2wQcZDRH0JiQqsYwcARMYp8HQvKgzHiwRe1EAWEgor
+BgEEAZdVAQUBAQdA1/KRJN3K6tbbHyIgnooRqx36X2PDFT+yIiVCBxQK/l0D
+AQgH/gkDCMD80CtZCl9l4PKqw/6+XftIlUFpgwsPxODshsglsvQ0LER+TosP
+azOCCJjW4BPpGkylHwEToCdayi/sSA9adcj60vA+kRKfROdUi2n3/s/CYQQY
+FggACQUCXtRAFgIbDAAKCRAta6PNQ1GUKAvHAQDDHWNyE//fWTTSU06TTnqJ
+JBM7cfxN6bHvYHjXyZVWbQEA8x1gbd17/Tlyjne/qnMEVqtG5DctuXqoM0kI
+PD+NWQ0=
+=eVBL
 -----END PGP PRIVATE KEY BLOCK-----
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: DSIG 1.0.0 OpenPGP Public Key
-Comment: Dr. Ralf S. Engelschall <rse@engelschall.com> [CBA9-F53F-DC7E-F31A-EEC2-4B35-85A8-735F-6651-5FF1]
+Comment: Dr. Ralf S. Engelschall <rse@engelschall.com> [AFF1-333B-AE41-A464-9915-B442-2D6B-A3CD-4351-9428]
 
-xjMEXtQ/FBYJKwYBBAHaRw8BAQdA6S++yiCv4YFCKXhiYBM1yefszTpHOM1C
-YcGq5LO0BrbNLURyLiBSYWxmIFMuIEVuZ2Vsc2NoYWxsIDxyc2VAZW5nZWxz
-Y2hhbGwuY29tPsJ4BBAWCgAgBQJe1D8UBgsJBwgDAgQVCAoCBBYCAQACGQEC
-GwMCHgEACgkQhahzX2ZRX/Fw2AD8D6E/E5Ah0X3X3NpMJ9nsZFAlY4mgtBMc
-UMZUjhMMwOwBALr5oBUVdjoURkJNmCBbL7pBrR+r9F0R/eCXvsKXqgQPzjgE
-XtQ/FBIKKwYBBAGXVQEFAQEHQOQZR1RFkFdeV6NYDQF0pGq2irJkmKpF+4x+
-TCVd7RoOAwEIB8JhBBgWCAAJBQJe1D8UAhsMAAoJEIWoc19mUV/x14gBAJS/
-9YvjVMMzNvYiFtb5Q2i0j4W+3g2wwSGuCsVyGNkHAPkBs9AExJe24F+ZZTp9
-ozUAS+JJDGu0NUa0xY/ZYO+XBQ==
-=viif
+xjMEXtRAFhYJKwYBBAHaRw8BAQdADCSgVU5xTcOvXxKObmSh2yGMI3oB0oKD
+KFq6kO+DOQjNLURyLiBSYWxmIFMuIEVuZ2Vsc2NoYWxsIDxyc2VAZW5nZWxz
+Y2hhbGwuY29tPsJ4BBAWCgAgBQJe1EAWBgsJBwgDAgQVCAoCBBYCAQACGQEC
+GwMCHgEACgkQLWujzUNRlChsMAD+IRI9TrqLneA4WmTRukWiceUuV95jGkeu
+S6FX5xrLiRMA/0Wo7TFcJAJzvCY9sEHGQ0R9CYkKrGMHAETGKfB0LyoMzjgE
+XtRAFhIKKwYBBAGXVQEFAQEHQNfykSTdyurW2x8iIJ6KEasd+l9jwxU/siIl
+QgcUCv5dAwEIB8JhBBgWCAAJBQJe1EAWAhsMAAoJEC1ro81DUZQoC8cBAMMd
+Y3IT/99ZNNJTTpNOeokkEztx/E3pse9geNfJlVZtAQDzHWBt3Xv9OXKOd7+q
+cwRWq0bkNy25eqgzSQg8P41ZDQ==
+=MkbC
 -----END PGP PUBLIC KEY BLOCK-----
-CBA9-F53F-DC7E-F31A-EEC2-4B35-85A8-735F-6651-5FF1
+$ dsig fingerprint sample.prv secure
+AFF1-333B-AE41-A464-9915-B442-2D6B-A3CD-4351-9428
+$ dsig fingerprint sample.pub >sample.fpr
+(echo "Meta 1"; echo "Meta 2") >sample.inf
+$ dsig sign sample.txt sample.sig sample.prv secure sample.inf
+$ cat sample.sig
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
 
-DSIG-Issued: 2020-05-31T23:34:45.209Z
-DSIG-Length: 13
+DSIG-Issued: 2020-05-31T23:39:02.985Z
+DSIG-Length: 12
 DSIG-Digest:
-    AA37-BDA8-C70D-D1A9-95B2-94D4-DC33-295E-6B7F-405A-45D9-2232-996B-F7D3-48E6-08C0
-    D67E-2B65-F06A-0A32-1853-B2F1-A06E-16CE-E670-2517-70DC-6E7D-A082-3C0D-63F3-12FB
+    91DF-590E-634E-39F6-7859-4EC1-D055-27CF-1077-88C2-AA29-00B9-CF84-D10E-BE83-3AEB
+    FB81-7B02-D66C-DCB6-B64F-FCEF-756E-AF32-3907-4683-94B7-1474-0BA9-6222-048E-FEAC
 
 Meta 1
 Meta 2
 
 -----BEGIN PGP SIGNATURE-----
 Version: DSIG 1.0.0 OpenPGP Digital Signature
-Comment: Dr. Ralf S. Engelschall <rse@engelschall.com> [CBA9-F53F-DC7E-F31A-EEC2-4B35-85A8-735F-6651-5FF1]
+Comment: Dr. Ralf S. Engelschall <rse@engelschall.com> [AFF1-333B-AE41-A464-9915-B442-2D6B-A3CD-4351-9428]
 
-wl4EARYKAAYFAl7UPxUACgkQhahzX2ZRX/GsvQEAxF7lY1QzmZ0SkEj3XoAM
-CYYpGcx2dkc9HFeJfRlxVl0BAJ2XZMVTQd8h/Lq3E3YKXhRY9LL0CXAqEdYr
-uRFu808I
-=yY7q
+wl4EARYKAAYFAl7UQBYACgkQLWujzUNRlCjKYQEA04+44sUM8JilOh0XON8k
+4PHB/nLXl29DE/QuZjcd654BAMDNAZZ5tsxv1cYPDC2byikasxyxtHZm1GET
+Glr4ZGcK
+=6pCb
 -----END PGP SIGNATURE-----
-rm -f sample.*
+$ dsig verify sample.txt sample.sig sample.pub "`cat sample.fpr`"
+Meta 1
+Meta 2
 ```
 
 Usage

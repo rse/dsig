@@ -41,6 +41,14 @@ Installation
 $ npm install [-g] dsig
 ```
 
+Example
+-------
+
+See the Example section of the [Unix manual
+page](src/dsig-cli.md#example) for an example how to prepare
+public/private key pair and fingerprint, and then sign and verify an
+application distribution archive or an application runtime license.
+
 Usage
 -----
 

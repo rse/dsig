@@ -105,11 +105,11 @@ The following commands and their options and arguments exist:
 ```sh
 # generate a private/public key pair
 $ dsig keygen \
-	--user-name "Dr. Ralf S. Engelschall" \
-	--user-email rse@engelschall.com \
-	--pass-phrase secure \
-	--private-key sample.prv \
-	--public-key sample.pub
+    --user-name "Dr. Ralf S. Engelschall" \
+    --user-email rse@engelschall.com \
+    --pass-phrase secure \
+    --private-key sample.prv \
+    --public-key sample.pub
 $ cat sample.prv sample.pub
 -----BEGIN PGP PRIVATE KEY BLOCK-----
 Version: DSIG-1.0 OpenPGP Private Key
@@ -150,8 +150,8 @@ rCC6ipOA7m7ZPVzo434fYTtICQ==
 ```sh
 # determine fingerprint of public key
 $ dsig fingerprint \
-	--public-key sample.pub \
-	--fingerprint sample.fpr
+    --public-key sample.pub \
+    --fingerprint sample.fpr
 $ cat sample.fpr
 4FC0-9DEF-4E4D-8BCE-46F7-3FD0-0B96-30C3-CB00-726A
 ```
@@ -169,11 +169,11 @@ $ (echo "Meta 1"; echo "Meta 2") >sample.inf
 ```sh
 # generate digital signature of payload and meta information
 $ dsig sign \
-	--payload sample.txt \
-	--signature sample.sig \
-	--pass-phrase secure \
-	--private-key sample.prv \
-	--meta-info sample.inf
+    --payload sample.txt \
+    --signature sample.sig \
+    --pass-phrase secure \
+    --private-key sample.prv \
+    --meta-info sample.inf
 $ cat sample.sig
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
@@ -201,11 +201,11 @@ Jam53esE
 ```sh
 # verify digital signature of digital payload and meta information
 $ dsig verify \
-	--payload sample.txt \
-	--signature sample.sig \
-	--public-key sample.pub \
-	--fingerprint sample.fpr \
-	--meta-info sample.inf.out
+    --payload sample.txt \
+    --signature sample.sig \
+    --public-key sample.pub \
+    --fingerprint sample.fpr \
+    --meta-info sample.inf.out
 $ cat sample.inf.out
 Meta 1
 Meta 2

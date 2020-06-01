@@ -102,6 +102,12 @@ The following commands and their options and arguments exist:
 
 ## EXAMPLE
 
+### Preparation
+
+We have to prepare a private key (kept secret at author side) and a
+public key (distributed to everyone) and determine the fingerprint of
+the public key (hard-coded into the application update procedure).
+
 ```sh
 # generate a private/public key pair
 $ dsig keygen \
@@ -156,20 +162,27 @@ $ cat sample.fpr
 4FC0-9DEF-4E4D-8BCE-46F7-3FD0-0B96-30C3-CB00-726A
 ```
 
+### Use Case 1: Application Distribution Archive Signing
+
+We can sign a distribution archive of the application and let the
+application update procedure verify the signature after downloading the
+distribution archive.
+
 ```sh
-# generate a sample payload
-$ echo -n "Foo Bar Quux" >sample.txt
+# generate a sample distribution archive
+$ echo "Foo Bar Quux" >sample.txt
+$ zip sample.zip sample.txt
 ```
 
 ```sh
 # generate a sample meta information
-$ (echo "Meta 1"; echo "Meta 2") >sample.inf
+$ (echo "Name: Sample"; echo "Version: 1.0.0"; echo "Released: 2020-01-01") >sample.inf
 ```
 
 ```sh
-# generate digital signature of payload and meta information
+# generate digital signature for distribution archive
 $ dsig sign \
-    --payload sample.txt \
+    --payload sample.zip \
     --signature sample.sig \
     --pass-phrase secure \
     --private-key sample.prv \
@@ -184,8 +197,9 @@ DSIG-Payload-Digest:
     91DF-590E-634E-39F6-7859-4EC1-D055-27CF-1077-88C2-AA29-00B9-CF84-D10E-BE83-3AEB
     FB81-7B02-D66C-DCB6-B64F-FCEF-756E-AF32-3907-4683-94B7-1474-0BA9-6222-048E-FEAC
 
-Meta 1
-Meta 2
+Name: Sample
+Version: 1.0.0
+Released: 2020-01-01
 
 -----BEGIN PGP SIGNATURE-----
 Version: DSIG-1.0 OpenPGP Digital Signature
@@ -199,16 +213,38 @@ Jam53esE
 ```
 
 ```sh
-# verify digital signature of digital payload and meta information
+# verify digital signature of distribution archive
 $ dsig verify \
-    --payload sample.txt \
+    --payload sample.zip \
     --signature sample.sig \
     --public-key sample.pub \
-    --fingerprint sample.fpr \
-    --meta-info sample.inf.out
-$ cat sample.inf.out
-Meta 1
-Meta 2
+    --fingerprint sample.fpr
+```
+
+### Use Case 2: Application License Signing
+
+We can generate a signed electronic version of the license of the
+application which can be verified by the application in its startup
+procedure.
+
+```sh
+# generate a sample license
+$ (echo "Name: Sample"; echo "Version: 1.0.*"; \
+  echo "Issued: 2020-01-01"; echo "Expires: 2020-12-31") >sample.txt
+$ dsig sign \
+	--signature sample.lic \
+	--pass-phrase secure \
+	--private-key sample.prv \
+	--meta-info sample.txt
+$ cat sample.lic
+```
+
+```sh
+# verify digital signature of license
+$ dsig verify \
+    --signature sample.lic \
+    --public-key sample.pub \
+    --fingerprint sample.fpr
 ```
 
 ## AUTHOR

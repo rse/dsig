@@ -5,6 +5,7 @@
 ##
 
 NPM = npm
+DSIG = node src/dsig-cli.js
 
 all: build
 
@@ -20,33 +21,59 @@ clean: bootstrap
 distclean: clean
 	-rm -rf node_modules
 
-test:
-	node src/dsig-cli.js keygen \
+test: test-prepare test-distribution test-license test-cleanup
+
+test-prepare:
+	$(DSIG) keygen \
 		--user-name "Dr. Ralf S. Engelschall" \
 		--user-email rse@engelschall.com \
 		--pass-phrase secure \
 		--private-key sample.prv \
 		--public-key sample.pub
 	cat sample.prv sample.pub
-	node src/dsig-cli.js fingerprint \
+	$(DSIG) fingerprint \
 		--public-key sample.pub \
 		--fingerprint sample.fpr
 	cat sample.fpr
-	echo -n "Foo Bar Quux" >sample.txt
-	(echo "Meta 1"; echo "Meta 2") >sample.inf
-	node src/dsig-cli.js sign \
-		--payload sample.txt \
+
+test-distribution:
+	echo -n "Foo" >sample.txt
+	zip sample.zip sample.txt
+	(echo "Name: Sample"; echo "Version: 1.0.0"; echo "Released: 2020-01-01") >sample.inf
+	$(DSIG) sign \
+		--payload sample.zip \
 		--signature sample.sig \
 		--pass-phrase secure \
 		--private-key sample.prv \
 		--meta-info sample.inf
 	cat sample.sig
-	node src/dsig-cli.js verify \
-		--payload sample.txt \
+	$(DSIG) verify \
+		--payload sample.zip \
 		--signature sample.sig \
 		--public-key sample.pub \
 		--fingerprint sample.fpr \
 		--meta-info sample.inf.out
 	cat sample.inf.out
+
+test-license:
+	(echo "Name: Sample"; echo "Version: 1.0.*"; \
+	echo "Issued: 2020-01-01"; echo "Expires: 2020-12-31") >sample.txt
+	$(DSIG) sign \
+		--signature sample.lic \
+		--pass-phrase secure \
+		--private-key sample.prv \
+		--meta-info sample.txt
+	cat sample.lic
+	$(DSIG) verify \
+		--signature sample.lic \
+		--public-key sample.pub \
+		--fingerprint sample.fpr
+	sed -i -e "s;Expires: 2020-12-31;Expires: 2021-12-31;" sample.lic
+	$(DSIG) verify \
+		--signature sample.lic \
+		--public-key sample.pub \
+		--fingerprint sample.fpr || true
+
+test-cleanup:
 	rm -f sample.*
 

@@ -50,7 +50,7 @@ export default {
     input: "src/dsig-api.js",
     output: {
         globals: {},
-        file:   "lib/dsig-api.js",
+        file:   "dst/dsig-api.js",
         name:   "DSIG",
         format: "umd"
     }

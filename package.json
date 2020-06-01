@@ -15,9 +15,8 @@
         "type":                         "git",
         "url":                          "https://github.com/rse/dsig.git"
     },
-    "browser":                          "./dsig-api.browser.js",
     "main":                             "./src/dsig-api.js",
-    "browser":                          "./lib/dsig-api.js",
+    "browser":                          "./dst/dsig-api.js",
     "bin": {
         "dsig":                         "./src/dsig-cli.js"
     },
@@ -51,11 +50,11 @@
         "remark-man":                   "7.0.0"
     },
     "scripts": {
-        "prepublishOnly":               "npm-run-all -s build:lint",
+        "prepublishOnly":               "npm-run-all -s build",
         "build":                        "npm-run-all -s build:lint build:rollup build:remark",
         "build:lint":                   "eslint --config eslint.yaml src/*.js && tsc src/*.d.ts",
         "build:rollup":                 "rollup -c",
-        "build:remark":                 "remark --quiet --use remark-man --output dsig.1 src/dsig-cli.md",
-        "clean":                        "shx rm -rf lib dsig.1"
+        "build:remark":                 "remark --quiet --use remark-man --output dst/dsig.1 src/dsig-cli.md",
+        "clean":                        "shx rm -rf dst"
     }
 }

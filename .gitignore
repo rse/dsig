@@ -1,4 +1,3 @@
 node_modules
-lib
+dst
 sample.*
-dsig.1

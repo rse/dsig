@@ -38,7 +38,7 @@ module.exports = class DSIG {
     /*  generate a private/public key pair  */
     static async keygen (userName, userEmail, passPhrase) {
         /*  generate key pair  */
-        const keypair = await scopedConfig("DSIG 1.0.0 <placeholder1>", "<placeholder2>", () => {
+        const keypair = await scopedConfig("DSIG-1.0 <placeholder1>", "<placeholder2>", () => {
             return openpgp.generateKey({
                 userIds:    [ { name: userName, email: userEmail } ],
                 passphrase: passPhrase,
@@ -63,12 +63,10 @@ module.exports = class DSIG {
         return { privateKey, publicKey }
     }
 
-    /*  calculate fingerprint of public or private key  */
-    static async fingerprint (publicOrPrivateKey, passPhrase = "") {
-        /*  read public (or private) key  */
-        const key = (await openpgp.key.readArmored(publicOrPrivateKey)).keys[0]
-        if (key.isPrivate())
-            await key.decrypt(passPhrase)
+    /*  calculate fingerprint of public key  */
+    static async fingerprint (publicKey) {
+        /*  read public key  */
+        const key = (await openpgp.key.readArmored(publicKey)).keys[0]
 
         /*  verify integrity of public key  */
         const result = await key.verifyPrimaryKey().then(() => "").catch((err) => err)
@@ -84,9 +82,9 @@ module.exports = class DSIG {
     }
 
     /*  sign payload with private key  */
-    static async sign (payload, privateKey, passPhrase, metaInfo = "") {
+    static async sign (payload, privateKey, passPhrase, metaInfo = null) {
         /*  read comment from private key  */
-        const [ , user ] = privateKey.match(/\nComment: *([^\n]+)/)
+        const [ , user ] = privateKey.match(/\r?\nComment: *([^\r\n]+)/)
         if (user === undefined)
             throw new Error("invalid privte key (comment line not found)")
 
@@ -100,28 +98,36 @@ module.exports = class DSIG {
         if (result !== "")
             throw new Error(`invalid private key (integrity check failed: ${result}`)
 
-        /*  calculate message digest on payload ourself  */
-        const hash = await openpgp.crypto.hash.sha512(payload)
-        let sha = openpgp.util.Uint8Array_to_hex(hash)
-        sha = sha.toUpperCase()
-
         /*  determine creation time and size  */
         const issued = (new Date()).toISOString()
-        const size = payload.length
+
+        /*  calculate message digest on payload ourself  */
+        let payloadDigest
+        let payloadLength
+        if (payload !== null) {
+            payloadDigest = await openpgp.crypto.hash.sha512(payload)
+            payloadDigest = openpgp.util.Uint8Array_to_hex(payloadDigest)
+            payloadDigest = payloadDigest.toUpperCase()
+            payloadLength = payload.length
+        }
 
         /*  define message  */
-        sha = sha
-            .replace(/([0-9A-F-]{4})(?=.)/g, "$1-")
-            .replace(/([0-9A-F-]{80})(?=.)/g, "$1\n    ")
-            .replace(/-$/mg, "")
-        let msg =
-            `DSIG-Issued: ${issued}\n` +
-            `DSIG-Length: ${size}\n` +
-            `DSIG-Digest:\n    ${sha}\n` +
-            (metaInfo !== "" ? `\n${metaInfo}` : "")
+        let msg = `DSIG-Issued: ${issued}\r\n`
+        if (payload !== null) {
+            msg += `DSIG-Payload-Length: ${payloadLength}\r\n`
+            const value = payloadDigest
+                .replace(/([0-9A-F-]{4})(?=.)/g, "$1-")
+                .replace(/([0-9A-F-]{80})(?=.)/g, "$1\r\n    ")
+                .replace(/-$/mg, "")
+            msg += `DSIG-Payload-Digest:\r\n    ${value}\r\n`
+        }
+        if (metaInfo !== null) {
+            metaInfo = metaInfo.replace(/\r?\n/g, "\r\n")
+            msg += `\r\n${metaInfo}`
+        }
 
         /*  verify clear-signed signature with public key  */
-        const sig = await scopedConfig("DSIG 1.0.0 OpenPGP Digital Signature", user, () => {
+        const sig = await scopedConfig("DSIG-1.0 OpenPGP Digital Signature", user, () => {
             msg = openpgp.cleartext.fromText(msg)
             return openpgp.sign({ message: msg, privateKeys: [ key ] })
         })
@@ -160,32 +166,35 @@ module.exports = class DSIG {
             throw new Error("invalid digital signature")
 
         /*  parse embedded key/value information  */
-        let m = result.data.match(/^((?:DSIG-[a-zA-Z0-9-]+: *[^\n]*(?:\n +[^\n]+)*\n)+)(?:\n((?:.|\n)*))?$/)
+        let m = result.data.match(/^((?:DSIG-[a-zA-Z0-9-]+: *[^\r\n]*(?:\r?\n +[^\r\n]+)*\r?\n)+)(?:\r?\n((?:.|\r?\n)*))?$/)
         if (m === null)
             throw new Error("invalid signature message")
         let [ , headers, metaInfo ] = m
         const header = {}
-        const re = /(DSIG-[a-zA-Z0-9-]+): *([^\n]*(?:\n +[^\n]+)*)\n/g
+        const re = /(DSIG-[a-zA-Z0-9-]+): *([^\r\n]*(?:\r?\n +[^\r\n]+)*)\r?\n/g
         while ((m = re.exec(headers)) !== null) {
             let [ , key, value ] = m
-            value = value.replace(/^ +/, "").replace(/\n +/g, "").replace(/ +$/, "")
+            value = value.replace(/^ +/, "").replace(/\r?\n +/g, "").replace(/ +$/, "")
             header[key] = value
         }
         if (metaInfo === undefined)
-            metaInfo = ""
+            metaInfo = null
 
-        /*  sanity check for existing message digest  */
-        if (header["DSIG-Digest"] === undefined)
-            throw new Error("DSIG-Digest header missing")
+        /*  verify payload integrity  */
+        if (payload !== null) {
+            /*  sanity check for existing message digest  */
+            if (header["DSIG-Payload-Digest"] === undefined)
+                throw new Error("DSIG-Payload-Digest header missing")
 
-        /*  calculate message digest on payload ourself  */
-        const hash = await openpgp.crypto.hash.sha512(payload)
-        let sha = openpgp.util.Uint8Array_to_hex(hash)
-        sha = sha.toUpperCase()
+            /*  calculate message digest on payload ourself  */
+            const hash = await openpgp.crypto.hash.sha512(payload)
+            let sha = openpgp.util.Uint8Array_to_hex(hash)
+            sha = sha.toUpperCase()
 
-        /*  compare message digests  */
-        if (sha !== header["DSIG-Digest"].replace(/-/g, ""))
-            throw new Error("DSIG-Digest does not match")
+            /*  compare message digests  */
+            if (sha !== header["DSIG-Payload-Digest"].replace(/-/g, ""))
+                throw new Error("DSIG-Payload-Digest does not match")
+        }
 
         /*  provide embedded key/value information  */
         return metaInfo

@@ -22,7 +22,10 @@
         "dsig":                         "./src/dsig-cli.js"
     },
     "dependencies": {
-        "openpgp":                      "4.10.4"
+        "openpgp":                      "4.10.4",
+        "yargs":                        "15.3.1",
+        "got":                          "11.2.0",
+        "get-stream":                   "5.1.0"
     },
     "devDependencies": {
         "eslint":                       "7.1.0",
@@ -42,12 +45,17 @@
         "@babel/core":                  "7.10.2",
         "@babel/preset-env":            "7.10.2",
         "npm-run-all":                  "4.1.5",
-        "shx":                          "0.3.2"
+        "shx":                          "0.3.2",
+        "remark-cli":                   "8.0.0",
+        "remark":                       "12.0.0",
+        "remark-man":                   "7.0.0"
     },
     "scripts": {
         "prepublishOnly":               "npm-run-all -s build:lint",
-        "build":                        "npm-run-all -s build:lint build:rollup",
+        "build":                        "npm-run-all -s build:lint build:rollup build:remark",
         "build:lint":                   "eslint --config eslint.yaml src/*.js && tsc src/*.d.ts",
-        "build:rollup":                 "rollup -c"
+        "build:rollup":                 "rollup -c",
+        "build:remark":                 "remark --quiet --use remark-man --output dsig.1 src/dsig-cli.md",
+        "clean":                        "shx rm -rf lib dsig.1"
     }
 }

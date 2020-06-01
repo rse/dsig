@@ -21,14 +21,32 @@ distclean: clean
 	-rm -rf node_modules
 
 test:
-	echo -n "Foo Bar Quux" >sample.txt
-	node src/dsig-cli.js keygen "Dr. Ralf S. Engelschall" "rse@engelschall.com" secure sample.prv sample.pub
+	node src/dsig-cli.js keygen \
+		--user-name "Dr. Ralf S. Engelschall" \
+		--user-email rse@engelschall.com \
+		--pass-phrase secure \
+		--private-key sample.prv \
+		--public-key sample.pub
 	cat sample.prv sample.pub
-	node src/dsig-cli.js fingerprint sample.prv secure
-	node src/dsig-cli.js fingerprint sample.pub >sample.fpr
+	node src/dsig-cli.js fingerprint \
+		--public-key sample.pub \
+		--fingerprint sample.fpr
+	cat sample.fpr
+	echo -n "Foo Bar Quux" >sample.txt
 	(echo "Meta 1"; echo "Meta 2") >sample.inf
-	node src/dsig-cli.js sign sample.txt sample.sig sample.prv secure sample.inf
+	node src/dsig-cli.js sign \
+		--payload sample.txt \
+		--signature sample.sig \
+		--pass-phrase secure \
+		--private-key sample.prv \
+		--meta-info sample.inf
 	cat sample.sig
-	node src/dsig-cli.js verify sample.txt sample.sig sample.pub "`cat sample.fpr`"
+	node src/dsig-cli.js verify \
+		--payload sample.txt \
+		--signature sample.sig \
+		--public-key sample.pub \
+		--fingerprint sample.fpr \
+		--meta-info sample.inf.out
+	cat sample.inf.out
 	rm -f sample.*
 

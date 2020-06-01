@@ -18,8 +18,7 @@ declare module "DSIG" {
 
         /*  calculate fingerprint of public or private key  */
         static fingerprint (
-            publicOrPrivateKey: string,                      /*  public or private key  */
-            passPhrase?:        string                       /*  pass-phrase of private key  */
+            publicKey:          string                       /*  public key  */
         ): Promise<{
             fingerPrint:        string                       /*  finger-print of public/private key  */
         }>;

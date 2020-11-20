@@ -293,6 +293,7 @@ const DSIG      = require("./dsig-api.js")
             /*  write output  */
             if (metaInfo !== null && opts.metaInfo !== "")
                 await io.output(opts.metaInfo, metaInfo)
+            return 0
         }
     }
 

@@ -23,8 +23,7 @@
     "dependencies": {
         "openpgp":                         "4.10.8",
         "yargs":                           "16.1.1",
-        "got":                             "11.8.0",
-        "get-stream":                      "6.0.0"
+        "cli-io":                          "0.9.3"
     },
     "devDependencies": {
         "eslint":                          "7.13.0",

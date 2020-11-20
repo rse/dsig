@@ -6,10 +6,8 @@
 */
 
 /*  external requirements  */
-const fs        = require("fs")
 const yargs     = require("yargs")
-const got       = require("got")
-const getStream = require("get-stream")
+const CLIio     = require("cli-io")
 
 /*  internal requirements  */
 const my        = require("../package.json")
@@ -61,52 +59,8 @@ const DSIG      = require("./dsig-api.js")
         })
     )
 
-    /*  helper function for reading input  */
-    const readInput = async (url, options = {}) => {
-        options = Object.assign({}, { encoding: "utf8" }, options)
-        let content
-        let m
-        if (url === "-" || url === "stdin:") {
-            /*  read from stdin  */
-            content = await getStream(process.stdin, options)
-        }
-        else if ((m = url.match(/^data:(.+)$/))) {
-            content = m[1]
-        }
-        else if (url.match(/^https?:\/\/.+/)) {
-            /*  read from URL  */
-            content = await got({
-                uri:      url,
-                encoding: options.encoding,
-                headers:  { "User-Agent": `${my.name}/${my.version}` }
-            })
-        }
-        else {
-            /*  read from file  */
-            url = url.replace(/^file:(?:\/\/)?/, "")
-            content = await fs.promises.readFile(url, options)
-        }
-        return content
-    }
-
-    /*  helper function for writing output  */
-    const writeOutput = async (filename, content, options = {}) => {
-        options = Object.assign({}, { encoding: "utf8" }, options)
-        if (filename === "-" || filename === "stdout:") {
-            /*  write to stdout  */
-            await new Promise((resolve, reject) => {
-                process.stdout.write(content, options.encoding, (err) => {
-                    if (err) reject(err)
-                    else     resolve()
-                })
-            })
-        }
-        else {
-            /*  write to file  */
-            filename = filename.replace(/^file:(?:\/\/)?/, "")
-            await fs.promises.writeFile(filename, content, options)
-        }
-    }
+    /*  establish CLI input/output  */
+    const io = new CLIio({ encoding: "utf8" })
 
     /*  define commands  */
     const commands = {
@@ -175,8 +129,8 @@ const DSIG      = require("./dsig-api.js")
             const keypair = await DSIG.keygen(opts.userName, opts.userEmail, opts.passPhrase)
 
             /*  write output  */
-            await writeOutput(opts.privateKey, keypair.privateKey)
-            await writeOutput(opts.publicKey,  keypair.publicKey)
+            await io.output(opts.privateKey, keypair.privateKey)
+            await io.output(opts.publicKey,  keypair.publicKey)
             return 0
         },
 
@@ -206,13 +160,13 @@ const DSIG      = require("./dsig-api.js")
             )
 
             /*  read input  */
-            const key = await readInput(opts.publicKey)
+            const key = await io.input(opts.publicKey)
 
             /*  perform underlying API operation  */
             const fingerprint = await DSIG.fingerprint(key)
 
             /*  write output  */
-            await writeOutput(opts.fingerprint, `${fingerprint}\n`)
+            await io.output(opts.fingerprint, `${fingerprint}\n`)
             return 0
         },
 
@@ -266,15 +220,15 @@ const DSIG      = require("./dsig-api.js")
             )
 
             /*  read input  */
-            const key = await readInput(opts.privateKey)
-            const payload  = opts.payload  !== "" ? await readInput(opts.payload, { encoding: null }) : null
-            const metaInfo = opts.metaInfo !== "" ? await readInput(opts.metaInfo) : null
+            const key = await io.input(opts.privateKey)
+            const payload  = opts.payload  !== "" ? await io.input(opts.payload, { encoding: null }) : null
+            const metaInfo = opts.metaInfo !== "" ? await io.input(opts.metaInfo) : null
 
             /*  perform underlying API operation  */
             const sig = await DSIG.sign(payload, key, opts.passPhrase, metaInfo)
 
             /*  write output  */
-            await writeOutput(opts.signature, sig)
+            await io.output(opts.signature, sig)
             return 0
         },
 
@@ -328,17 +282,17 @@ const DSIG      = require("./dsig-api.js")
             )
 
             /*  read input  */
-            const payload     = opts.payload !== "" ? await readInput(opts.payload, { encoding: null }) : null
-            const signature   = await readInput(opts.signature)
-            const publicKey   = await readInput(opts.publicKey)
-            const fingerprint = await readInput(opts.fingerprint)
+            const payload     = opts.payload !== "" ? await io.input(opts.payload, { encoding: null }) : null
+            const signature   = await io.input(opts.signature)
+            const publicKey   = await io.input(opts.publicKey)
+            const fingerprint = await io.input(opts.fingerprint)
 
             /*  perform underlying API operation  */
             const metaInfo = await DSIG.verify(payload, signature, publicKey, fingerprint)
 
             /*  write output  */
             if (metaInfo !== null && opts.metaInfo !== "")
-                await writeOutput(opts.metaInfo, metaInfo)
+                await io.output(opts.metaInfo, metaInfo)
         }
     }
 

@@ -58,7 +58,16 @@ The following top-level options and arguments exist:
   The particular command, either `version`, `keygen`, `fingerprint`, `sign` or `verify`.
 
 - \[*options*\]:
-  The options of the command.
+  The options of the command. All file-based arguments of options can
+  be of various forms:
+
+    -  reading input data is supported from `stdin` (with filenames `-` or `stdin:`),
+       from URLs with HTTP (with filenames starting with `http:` or `https:`)
+       and from local files (with filenames starting with `file:` or no scheme)
+
+    -  writing output data is supported to `stdout` (with filenames `-` or `stdout:`),
+       to URLs with HTTP/WebDAV (with filenames starting with `http:` or `https:`)
+       and to local files (with filenames starting with `file:` or no scheme)
 
 ## COMMANDS
 

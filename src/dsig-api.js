@@ -86,7 +86,7 @@ module.exports = class DSIG {
         /*  read comment from private key  */
         const [ , user ] = privateKey.match(/\r?\nComment: *([^\r\n]+)/)
         if (user === undefined)
-            throw new Error("invalid privte key (comment line not found)")
+            throw new Error("invalid private key (comment line not found)")
 
         /*  read private key  */
         const key = (await openpgp.key.readArmored(privateKey)).keys[0]

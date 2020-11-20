@@ -42,10 +42,10 @@ test-distribution:
 	(echo "Name: Sample"; echo "Version: 1.0.0"; echo "Released: 2020-01-01") >sample.inf
 	$(DSIG) sign \
 		--payload sample.zip \
-		--signature sample.sig \
-		--pass-phrase secure \
 		--private-key sample.prv \
-		--meta-info sample.inf
+		--pass-phrase secure \
+		--meta-info sample.inf \
+		--signature sample.sig
 	cat sample.sig
 	$(DSIG) verify \
 		--payload sample.zip \
@@ -59,10 +59,10 @@ test-license:
 	(echo "Name: Sample"; echo "Version: 1.0.*"; \
 	echo "Issued: 2020-01-01"; echo "Expires: 2020-12-31") >sample.txt
 	$(DSIG) sign \
-		--signature sample.lic \
-		--pass-phrase secure \
 		--private-key sample.prv \
-		--meta-info sample.txt
+		--pass-phrase secure \
+		--meta-info sample.txt \
+		--signature sample.lic
 	cat sample.lic
 	$(DSIG) verify \
 		--signature sample.lic \

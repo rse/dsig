@@ -85,11 +85,11 @@ The following commands and their options and arguments exist:
   Calculate fingerprint of public key.
 
 - `dsig sign`
-  \[`--pass-phrase`|`-w` *pass-phase*\]
-  \[`--private-key`|`-k` *private-key-file*\]
-  \[`--signature`|`-s` *signature-file*\]
   \[`--payload`|`-p` *payload-file*\]
-  \[`--meta-info`|`-m` *meta-info-file*\]:
+  \[`--private-key`|`-k` *private-key-file*\]
+  \[`--pass-phrase`|`-w` *pass-phase*\]
+  \[`--meta-info`|`-m` *meta-info-file*\]
+  \[`--signature`|`-s` *signature-file*\]:
   Generate a digital signature to sign a payload and/or meta information.
 
 - `dsig verify`

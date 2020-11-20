@@ -40,7 +40,7 @@ declare module "DSIG" {
             publicKey:          string,                      /*  public key  */
             fingerPrint:        string                       /*  finger-print of public/private key  */
         ): Promise <{
-            metaInfo:           string                       /*  optional meta information  */
+            metaInfo:           string                       /*  meta information  */
         }>;
     }
     export = DSIG

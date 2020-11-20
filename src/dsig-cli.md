@@ -34,7 +34,7 @@
 \[`--payload`|`-p` *payload-file*\]
 `--signature`|`-s` *signature-file*
 `--public-key`|`-k` *public-key-file*
-`--fingerprint`|`-f` *fingerprint-file*
+\[`--fingerprint`|`-f` *fingerprint-file*\]
 \[`--meta-info`|`-m` *meta-info-file*\]
 
 ## DESCRIPTION
@@ -101,7 +101,7 @@ The following commands and their options and arguments exist:
   \[`--payload`|`-p` *payload-file*\]
   `--signature`|`-s` *signature-file*
   `--public-key`|`-k` *public-key-file*
-  `--fingerprint`|`-f` *fingerprint-file*
+  \[`--fingerprint`|`-f` *fingerprint-file*\]
   \[`--meta-info`|`-m` *meta-info-file*\]:
   Verify digital signature of payload and/or meta information.
 

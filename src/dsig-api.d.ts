@@ -38,7 +38,7 @@ declare module "DSIG" {
             payload:            string|Buffer|null,          /*  optional payload to verify  */
             signature:          string,                      /*  signature to verify  */
             publicKey:          string,                      /*  public key  */
-            fingerPrint:        string                       /*  finger-print of public/private key  */
+            fingerPrint?:       string|null                  /*  optional finger-print of public/private key  */
         ): Promise <{
             metaInfo:           string                       /*  meta information  */
         }>;

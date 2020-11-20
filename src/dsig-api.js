@@ -138,7 +138,7 @@ module.exports = class DSIG {
     }
 
     /*  verify payload with public key and fingerprint  */
-    static async verify (payload, signature, publicKey, fingerPrint) {
+    static async verify (payload, signature, publicKey, fingerPrint = null) {
         /*  read public key  */
         const key = (await openpgp.key.readArmored(publicKey)).keys[0]
 
@@ -146,9 +146,11 @@ module.exports = class DSIG {
         let result = await key.verifyPrimaryKey().then(() => "").catch((err) => err)
         if (result !== "")
             throw new Error(`invalid public key (integrity check failed: ${result}`)
-        const fingerprint = fingerPrint.toLowerCase().replace(/[^a-fA-F0-9]/g, "")
-        if (key.primaryKey.getFingerprint() !== fingerprint)
-            throw new Error("invalid public key (fingerprint does not match)")
+        if (fingerprint !== null) {
+            const fingerprint = fingerPrint.toLowerCase().replace(/[^a-fA-F0-9]/g, "")
+            if (key.primaryKey.getFingerprint() !== fingerprint)
+                throw new Error("invalid public key (fingerprint does not match)")
+        }
 
         /*  read clear-signed signature  */
         const sig = await openpgp.cleartext.readArmored(signature)

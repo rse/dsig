@@ -241,7 +241,7 @@ const DSIG      = require("./dsig-api.js")
                     "[--payload|-p <payload-file>]",
                     "--signature|-s <signature-file>",
                     "--public-key|-k <public-key-file>",
-                    "--fingerprint|-f <fingerprint-file>",
+                    "[--fingerprint|-f <fingerprint-file>]",
                     "[--meta-info|-m <meta-info-file>]"
                 ].join(" "))
                 .option("payload", {
@@ -270,7 +270,7 @@ const DSIG      = require("./dsig-api.js")
                     type:         "string",
                     describe:     "file to read fingerprint of public key",
                     nargs:        1,
-                    demandOption: true
+                    default:      ""
                 })
                 .option("meta-info", {
                     alias:        "i",
@@ -285,7 +285,7 @@ const DSIG      = require("./dsig-api.js")
             const payload     = opts.payload !== "" ? await io.input(opts.payload, { encoding: null }) : null
             const signature   = await io.input(opts.signature)
             const publicKey   = await io.input(opts.publicKey)
-            const fingerprint = await io.input(opts.fingerprint)
+            const fingerprint = opts.fingerprint !== "" ? await io.input(opts.fingerprint) : null
 
             /*  perform underlying API operation  */
             const metaInfo = await DSIG.verify(payload, signature, publicKey, fingerprint)

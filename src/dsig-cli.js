@@ -129,8 +129,8 @@ const DSIG      = require("./dsig-api.js")
             const keypair = await DSIG.keygen(opts.userName, opts.userEmail, opts.passPhrase)
 
             /*  write output  */
-            await io.output(opts.privateKey, keypair.privateKey)
-            await io.output(opts.publicKey,  keypair.publicKey)
+            await io.output(opts.privateKey, keypair.privateKey, { mode: 0o600 })
+            await io.output(opts.publicKey,  keypair.publicKey,  { mode: 0o644 })
             return 0
         },
 

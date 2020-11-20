@@ -25,18 +25,18 @@ declare module "DSIG" {
 
         /*  sign payload with private key  */
         static sign (
-            payload:            string|Buffer,               /*  payload to sign  */
+            payload:            string|Buffer|null,          /*  optional payload to sign  */
             privateKey:         string,                      /*  private key  */
             passPhrase:         string,                      /*  pass-phrase of private key  */
-            metaInfo?:          string,                      /*  optional meta information  */
+            metaInfo?:          string|null,                 /*  optional meta information  */
         ): Promise<{
             signature:          string                       /*  signature  */
         }>;
 
         /*  verify payload with public key and fingerprint  */
         static verify (
-            payload:            string|Buffer,               /*  payload to verify  */
-            signature:          string,                      /*  signature  */
+            payload:            string|Buffer|null,          /*  optional payload to verify  */
+            signature:          string,                      /*  signature to verify  */
             publicKey:          string,                      /*  public key  */
             fingerPrint:        string                       /*  finger-print of public/private key  */
         ): Promise <{

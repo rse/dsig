@@ -47,7 +47,7 @@ const DSIG      = require("./dsig-api.js")
     let argv = process.argv.slice(2)
     const optsGlobal = parseArgs(argv, { "halt-at-non-option": true }, { min: 1 }, (yargs) =>
         yargs.usage(
-            "USAGE: dsig [--help|-h] <command> [<options>] [<arguments>]\n" +
+            "USAGE: dsig [--help|-h] <command> [<options>]\n" +
             "\n" +
             "Commands:\n" +
             "  version, keygen, fingerprint, sign, verify"
@@ -128,11 +128,11 @@ const DSIG      = require("./dsig-api.js")
             const opts = parseArgs(argv, {}, { min: 0, max: 0 }, (yargs) =>
                 yargs.usage([
                     "USAGE: dsig keygen",
-                    "[--user-name|-n <user-name>]",
-                    "[--user-email|-m <user-email>]",
-                    "[--pass-phrase|-w <pass-phase>]",
-                    "[--private-key|-k <private-key-file>]",
-                    "[--public-key|-p <public-key-file>]"
+                    "--user-name|-n <user-name>",
+                    "--user-email|-m <user-email>",
+                    "--pass-phrase|-w <pass-phase>",
+                    "--private-key|-k <private-key-file>",
+                    "--public-key|-p <public-key-file>"
                 ].join(" "))
                 .option("user-name", {
                     alias:        "n",
@@ -186,8 +186,8 @@ const DSIG      = require("./dsig-api.js")
             const opts = parseArgs(argv, {}, { min: 0, max: 0 }, (yargs) =>
                 yargs.usage([
                     "USAGE: dsig fingerprint",
-                    "[--public-key|-p <public-key-file>]",
-                    "[--fingerprint|-f <fingerprint-file>]"
+                    "--public-key|-p <public-key-file>",
+                    "--fingerprint|-f <fingerprint-file>"
                 ].join(" "))
                 .option("public-key", {
                     alias:        "p",
@@ -222,18 +222,18 @@ const DSIG      = require("./dsig-api.js")
             const opts = parseArgs(argv, {}, { min: 0, max: 0 }, (yargs) =>
                 yargs.usage([
                     "USAGE: dsig sign",
-                    "[--pass-phrase|-w <pass-phase>]",
-                    "[--private-key|-k <private-key-file>]",
-                    "[--signature|-s <signature-file>]",
                     "[--payload|-p <payload-file>]",
-                    "[--meta-info|-m <meta-info-file>]"
+                    "--private-key|-k <private-key-file>",
+                    "--pass-phrase|-w <pass-phase>",
+                    "[--meta-info|-m <meta-info-file>]",
+                    "--signature|-s <signature-file>"
                 ].join(" "))
-                .option("pass-phrase", {
-                    alias:        "w",
+                .option("payload", {
+                    alias:        "p",
                     type:         "string",
-                    describe:     "pass-phrase for private key",
+                    describe:     "file to read payload",
                     nargs:        1,
-                    demandOption: true
+                    default:      ""
                 })
                 .option("private-key", {
                     alias:        "k",
@@ -242,19 +242,12 @@ const DSIG      = require("./dsig-api.js")
                     nargs:        1,
                     demandOption: true
                 })
-                .option("signature", {
-                    alias:        "s",
+                .option("pass-phrase", {
+                    alias:        "w",
                     type:         "string",
-                    describe:     "file to store digital signature",
+                    describe:     "pass-phrase for private key",
                     nargs:        1,
                     demandOption: true
-                })
-                .option("payload", {
-                    alias:        "p",
-                    type:         "string",
-                    describe:     "file to read payload",
-                    nargs:        1,
-                    default:      ""
                 })
                 .option("meta-info", {
                     alias:        "i",
@@ -262,6 +255,13 @@ const DSIG      = require("./dsig-api.js")
                     describe:     "file to read meta information",
                     nargs:        1,
                     default:      ""
+                })
+                .option("signature", {
+                    alias:        "s",
+                    type:         "string",
+                    describe:     "file to store digital signature",
+                    nargs:        1,
+                    demandOption: true
                 })
             )
 
@@ -283,11 +283,11 @@ const DSIG      = require("./dsig-api.js")
             /*  parse command line options  */
             const opts = parseArgs(argv, {}, { min: 0, max: 0 }, (yargs) =>
                 yargs.usage([
-                    "USAGE: dsig fingerprint",
+                    "USAGE: dsig verify",
                     "[--payload|-p <payload-file>]",
-                    "[--signature|-s <signature-file>]",
-                    "[--public-key|-k <public-key-file>]",
-                    "[--fingerprint|-f <fingerprint-file>]",
+                    "--signature|-s <signature-file>",
+                    "--public-key|-k <public-key-file>",
+                    "--fingerprint|-f <fingerprint-file>",
                     "[--meta-info|-m <meta-info-file>]"
                 ].join(" "))
                 .option("payload", {

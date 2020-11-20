@@ -7,35 +7,34 @@
 \[`--help`|`-h`]
 *command*
 \[*options*\]
-\[*arguments*\]
 
 `dsig`
 `version`
 
 `dsig`
 `keygen`
-\[`--user-name`|`-n` *user-name*\]
-\[`--user-email`|`-m` *user-email*\]
-\[`--pass-phrase`|`-w` *pass-phase*\]
-\[`--private-key`|`-k` *private-key-file*\]
-\[`--public-key`|`-p` *public-key-file*\]
+`--user-name`|`-n` *user-name*
+`--user-email`|`-m` *user-email*
+`--pass-phrase`|`-w` *pass-phase*
+`--private-key`|`-k` *private-key-file*
+`--public-key`|`-p` *public-key-file*
 
 `dsig fingerprint`
-\[`--public-key`|`-p` *public-key-file*\]
-\[`--fingerprint`|`-f` *fingerprint-file*\]
+`--public-key`|`-p` *public-key-file*
+`--fingerprint`|`-f` *fingerprint-file*
 
 `dsig sign`
 \[`--payload`|`-p` *payload-file*\]
-\[`--private-key`|`-k` *private-key-file*\]
-\[`--pass-phrase`|`-w` *pass-phase*\]
+`--private-key`|`-k` *private-key-file*
+`--pass-phrase`|`-w` *pass-phase*
 \[`--meta-info`|`-m` *meta-info-file*\]
-\[`--signature`|`-s` *signature-file*\]
+`--signature`|`-s` *signature-file*
 
 `dsig verify`
 \[`--payload`|`-p` *payload-file*\]
-\[`--signature`|`-s` *signature-file*\]
-\[`--public-key`|`-k` *public-key-file*\]
-\[`--fingerprint`|`-f` *fingerprint-file*\]
+`--signature`|`-s` *signature-file*
+`--public-key`|`-k` *public-key-file*
+`--fingerprint`|`-f` *fingerprint-file*
 \[`--meta-info`|`-m` *meta-info-file*\]
 
 ## DESCRIPTION
@@ -61,9 +60,6 @@ The following top-level options and arguments exist:
 - \[*options*\]:
   The options of the command.
 
-- \[*arguments*\]:
-  The non-option arguments of the command.
-
 ## COMMANDS
 
 The following commands and their options and arguments exist:
@@ -72,31 +68,31 @@ The following commands and their options and arguments exist:
   Display detailed program version information.
 
 - `dsig keygen`
-  \[`--user-name`|`-n` *user-name*\]
-  \[`--user-email`|`-m` *user-email*\]
-  \[`--pass-phrase`|`-w` *pass-phase*\]
-  \[`--private-key`|`-k` *private-key-file*\]
-  \[`--public-key`|`-p` *public-key-file*\]:
+  `--user-name`|`-n` *user-name*
+  `--user-email`|`-m` *user-email*
+  `--pass-phrase`|`-w` *pass-phase*
+  `--private-key`|`-k` *private-key-file*
+  `--public-key`|`-p` *public-key-file*:
   Generate a private/public key pair.
 
 - `dsig fingerprint`
-  \[`--public-key`|`-p` *public-key-file*\]
-  \[`--fingerprint`|`-f` *fingerprint-file*\]:
+  `--public-key`|`-p` *public-key-file*
+  `--fingerprint`|`-f` *fingerprint-file*:
   Calculate fingerprint of public key.
 
 - `dsig sign`
   \[`--payload`|`-p` *payload-file*\]
-  \[`--private-key`|`-k` *private-key-file*\]
-  \[`--pass-phrase`|`-w` *pass-phase*\]
+  `--private-key`|`-k` *private-key-file*
+  `--pass-phrase`|`-w` *pass-phase*
   \[`--meta-info`|`-m` *meta-info-file*\]
-  \[`--signature`|`-s` *signature-file*\]:
+  `--signature`|`-s` *signature-file*:
   Generate a digital signature to sign a payload and/or meta information.
 
 - `dsig verify`
   \[`--payload`|`-p` *payload-file*\]
-  \[`--signature`|`-s` *signature-file*\]
-  \[`--public-key`|`-k` *public-key-file*\]
-  \[`--fingerprint`|`-f` *fingerprint-file*\]
+  `--signature`|`-s` *signature-file*
+  `--public-key`|`-k` *public-key-file*
+  `--fingerprint`|`-f` *fingerprint-file*
   \[`--meta-info`|`-m` *meta-info-file*\]:
   Verify digital signature of payload and/or meta information.
 

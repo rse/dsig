@@ -22,21 +22,21 @@
 
 `dsig fingerprint`
 \[`--public-key`|`-p` *public-key-file*\]
-\[`--fingerprint`|`-f` *fingerprint-file*\]:
+\[`--fingerprint`|`-f` *fingerprint-file*\]
 
 `dsig sign`
-\[`--pass-phrase`|`-w` *pass-phase*\]
-\[`--private-key`|`-k` *private-key-file*\]
-\[`--signature`|`-s` *signature-file*\]
 \[`--payload`|`-p` *payload-file*\]
-\[`--meta-info`|`-m` *meta-info-file*\]:
+\[`--private-key`|`-k` *private-key-file*\]
+\[`--pass-phrase`|`-w` *pass-phase*\]
+\[`--meta-info`|`-m` *meta-info-file*\]
+\[`--signature`|`-s` *signature-file*\]
 
 `dsig verify`
 \[`--payload`|`-p` *payload-file*\]
 \[`--signature`|`-s` *signature-file*\]
 \[`--public-key`|`-k` *public-key-file*\]
 \[`--fingerprint`|`-f` *fingerprint-file*\]
-\[`--meta-info`|`-m` *meta-info-file*\]:
+\[`--meta-info`|`-m` *meta-info-file*\]
 
 ## DESCRIPTION
 

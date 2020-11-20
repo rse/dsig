@@ -45,6 +45,8 @@
         "@babel/preset-env":               "7.12.1",
         "npm-run-all":                     "4.1.5",
         "shx":                             "0.3.3",
+        "pkg":                             "4.4.9",
+        "cross-zip-cli":                   "1.0.0",
         "remark-cli":                      "9.0.0",
         "remark":                          "13.0.0",
         "remark-man":                      "7.0.0"
@@ -55,6 +57,15 @@
         "build:lint":                      "eslint --config eslint.yaml src/*.js && tsc src/dsig-api.d.ts",
         "build:rollup":                    "rollup -c",
         "build:remark":                    "remark --quiet --use remark-man --output dst/dsig.1 src/dsig-cli.md",
+        "package":                         "npm-run-all -s package:gen package:mv:win package:mv:mac package:mv:lnx package:zip:win package:zip:mac package:zip:lnx",
+        "package:gen":                     "pkg -t node14-win-x64,node14-macos-x64,node14-linux-x64 -o dsig .",
+        "package:mv:win":                  "shx mv dsig-win.exe dsig-win-x64.exe",
+        "package:mv:mac":                  "shx mv dsig-macos   dsig-mac-x64",
+        "package:mv:lnx":                  "shx mv dsig-linux   dsig-lnx-x64",
+        "package:zip:win":                 "cross-zip dsig-win-x64.exe dsig-win-x64.zip",
+        "package:zip:mac":                 "cross-zip dsig-mac-x64 dsig-mac-x64.zip",
+        "package:zip:lnx":                 "cross-zip dsig-lnx-x64 dsig-lnx-x64.zip",
+        "package:clean":                   "rm -f dsig-win-x64.zip dsig-win-x64.exe dsig-mac-x64.zip dsig-mac-x64 dsig-lnx-x64.zip dsig-lnx-x64",
         "clean":                           "shx rm -rf dst"
     }
 }

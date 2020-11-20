@@ -146,7 +146,7 @@ module.exports = class DSIG {
         let result = await key.verifyPrimaryKey().then(() => "").catch((err) => err)
         if (result !== "")
             throw new Error(`invalid public key (integrity check failed: ${result}`)
-        if (fingerprint !== null) {
+        if (fingerPrint !== null) {
             const fingerprint = fingerPrint.toLowerCase().replace(/[^a-fA-F0-9]/g, "")
             if (key.primaryKey.getFingerprint() !== fingerprint)
                 throw new Error("invalid public key (fingerprint does not match)")

@@ -1,6 +1,6 @@
 ##
 ##  DSIG -- Digital Signature with OpenPGP
-##  Copyright (c) 2015-2020 Dr. Ralf S. Engelschall <rse@engelschall.com>
+##  Copyright (c) 2015-2021 Dr. Ralf S. Engelschall <rse@engelschall.com>
 ##  Licensed under LGPL 3.0 <https://spdx.org/licenses/LGPL-3.0-only>
 ##
 

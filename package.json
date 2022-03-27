@@ -1,6 +1,6 @@
 {
     "name":                                "dsig",
-    "version":                             "1.2.0",
+    "version":                             "1.2.1",
     "description":                         "Digital Signature with OpenPGP",
     "keywords":                            [ "digital", "signature", "openpgp" ],
     "author": {

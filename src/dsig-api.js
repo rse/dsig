@@ -1,61 +1,39 @@
 /*
 **  DSIG -- Digital Signature with OpenPGP
-**  Copyright (c) 2015-2021 Dr. Ralf S. Engelschall <rse@engelschall.com>
+**  Copyright (c) 2015-2022 Dr. Ralf S. Engelschall <rse@engelschall.com>
 **  Licensed under LGPL 3.0 <https://spdx.org/licenses/LGPL-3.0-only>
 */
 
 /*  external requirements  */
 const openpgp = require("openpgp")
-
-/*  helper function for scoped OpenPGP.js configuration  */
-const scopedConfig = async (version, comment, callback) => {
-    /*  preserve old values  */
-    const showversion   = openpgp.config.show_version
-    const versionstring = openpgp.config.versionstring
-    const showcomment   = openpgp.config.show_comment
-    const commentstring = openpgp.config.commentstring
-
-    /*  set new values  */
-    openpgp.config.show_version  = true
-    openpgp.config.versionstring = version
-    openpgp.config.show_comment  = true
-    openpgp.config.commentstring = comment
-
-    /*  execute asynchronous callback  */
-    const result = await callback()
-
-    /*  restore old values  */
-    openpgp.config.show_version  = showversion
-    openpgp.config.versionstring = versionstring
-    openpgp.config.show_comment  = showcomment
-    openpgp.config.commentstring = commentstring
-
-    return result
-}
+const sha512  = require("hash.js/lib/hash/sha/512")
 
 /*  the API class  */
 module.exports = class DSIG {
     /*  generate a private/public key pair  */
     static async keygen (userName, userEmail, passPhrase) {
         /*  generate key pair  */
-        const keypair = await scopedConfig("DSIG-1.0 <placeholder1>", "<placeholder2>", () => {
-            return openpgp.generateKey({
-                userIds:    [ { name: userName, email: userEmail } ],
-                passphrase: passPhrase,
-                curve:      "curve25519"
-            })
+        const keypair = await openpgp.generateKey({
+            userIDs:    [ { name: userName, email: userEmail } ],
+            passphrase: passPhrase,
+            curve:      openpgp.enums.curve.curve25519,
+            config: {
+                showVersion:   true,
+                versionString: "DSIG-1.0 <placeholder1>",
+                showComment:   true,
+                commentString: "<placeholder2>"
+            }
         })
 
         /*  calculate fingerprint  */
-        let fp = (await openpgp.key.readArmored(keypair.publicKeyArmored))
-            .keys[0].primaryKey.getFingerprint()
+        let fp = (await openpgp.readKey({ armoredKey: keypair.publicKey })).getFingerprint()
         fp = fp.toUpperCase().replace(/([0-9A-F]{4})(?=.)/g, "$1-")
 
         /*  post-adjust private/public keys  */
-        const privateKey = keypair.privateKeyArmored
+        const privateKey = keypair.privateKey
             .replace(/<placeholder1>/, "OpenPGP Private Key")
             .replace(/<placeholder2>/, `${userName} <${userEmail}> [${fp}]`)
-        const publicKey = keypair.publicKeyArmored
+        const publicKey = keypair.publicKey
             .replace(/<placeholder1>/, "OpenPGP Public Key")
             .replace(/<placeholder2>/, `${userName} <${userEmail}> [${fp}]`)
 
@@ -66,7 +44,7 @@ module.exports = class DSIG {
     /*  calculate fingerprint of public key  */
     static async fingerprint (publicKey) {
         /*  read public key  */
-        const key = (await openpgp.key.readArmored(publicKey)).keys[0]
+        const key = await openpgp.readKey({ armoredKey: publicKey })
 
         /*  verify integrity of public key  */
         const result = await key.verifyPrimaryKey().then(() => "").catch((err) => err)
@@ -74,7 +52,7 @@ module.exports = class DSIG {
             throw new Error(`invalid public key (integrity check failed: ${result}`)
 
         /*  extract fingerprint  */
-        let fp = key.primaryKey.getFingerprint()
+        let fp = key.getFingerprint()
         fp = fp.toUpperCase().replace(/([0-9A-F]{4})(?=.)/g, "$1-")
 
         /*  return fingerprint  */
@@ -89,9 +67,9 @@ module.exports = class DSIG {
             throw new Error("invalid private key (comment line not found)")
 
         /*  read private key  */
-        const key = (await openpgp.key.readArmored(privateKey)).keys[0]
+        let key = await openpgp.readKey({ armoredKey: privateKey })
         if (key.isPrivate())
-            await key.decrypt(passPhrase)
+            key = await openpgp.decryptKey({ privateKey: key, passphrase: passPhrase })
 
         /*  verify integrity of private key  */
         const result = await key.verifyPrimaryKey().then(() => "").catch((err) => err)
@@ -105,8 +83,7 @@ module.exports = class DSIG {
         let payloadDigest
         let payloadLength
         if (payload !== null) {
-            payloadDigest = await openpgp.crypto.hash.sha512(payload)
-            payloadDigest = openpgp.util.Uint8Array_to_hex(payloadDigest)
+            payloadDigest = sha512().update(payload).digest("hex")
             payloadDigest = payloadDigest.toUpperCase()
             payloadLength = payload.length
         }
@@ -127,20 +104,26 @@ module.exports = class DSIG {
         }
 
         /*  verify clear-signed signature with public key  */
-        const sig = await scopedConfig("DSIG-1.0 OpenPGP Digital Signature", user, () => {
-            msg = openpgp.cleartext.fromText(msg)
-            return openpgp.sign({ message: msg, privateKeys: [ key ] })
+        msg = await openpgp.createCleartextMessage({ text: msg })
+        let sig = await openpgp.sign({
+            message: msg,
+            signingKeys: [ key ],
+            config: {
+                showVersion: true,
+                versionString: "DSIG-1.0 OpenPGP Digital Signature",
+                showComment: true,
+                commentString: user
+            }
         })
-        sig.data = sig.data
-            .replace(/^\r?\n/, "")
+        sig = sig.replace(/^\r?\n/, "")
             .replace(/(\r?\n)\r?\n$/, "$1")
-        return sig.data
+        return sig
     }
 
     /*  verify payload with public key and fingerprint  */
     static async verify (payload, signature, publicKey, fingerPrint = null) {
         /*  read public key  */
-        const key = (await openpgp.key.readArmored(publicKey)).keys[0]
+        const key = await openpgp.readKey({ armoredKey: publicKey })
 
         /*  verify integrity of public key  */
         let result = await key.verifyPrimaryKey().then(() => "").catch((err) => err)
@@ -148,23 +131,22 @@ module.exports = class DSIG {
             throw new Error(`invalid public key (integrity check failed: ${result}`)
         if (fingerPrint !== null) {
             const fingerprint = fingerPrint.toLowerCase().replace(/[^a-fA-F0-9]/g, "")
-            if (key.primaryKey.getFingerprint() !== fingerprint)
+            if (key.getFingerprint() !== fingerprint)
                 throw new Error("invalid public key (fingerprint does not match)")
         }
 
         /*  read clear-signed signature  */
-        const sig = await openpgp.cleartext.readArmored(signature)
+        const sig = await openpgp.readCleartextMessage({ cleartextMessage: signature })
 
         /*  verify clear-signed signature with public key  */
-        result = await openpgp.verify({ message: sig, publicKeys: [ key ] })
+        result = await openpgp.verify({ message: sig, verificationKeys: [ key ] })
 
         /*  ensure that the signature validated successfully  */
         if (!(   typeof result === "object"
               && typeof result.signatures === "object"
               && result.signatures instanceof Array
               && result.signatures.length === 1
-              && typeof result.signatures[0].valid === "boolean"
-              && result.signatures[0].valid === true))
+              && (await result.signatures[0].verified) === true))
             throw new Error("invalid digital signature")
 
         /*  parse embedded key/value information  */
@@ -189,9 +171,7 @@ module.exports = class DSIG {
                 throw new Error("DSIG-Payload-Digest header missing")
 
             /*  calculate message digest on payload ourself  */
-            const hash = await openpgp.crypto.hash.sha512(payload)
-            let sha = openpgp.util.Uint8Array_to_hex(hash)
-            sha = sha.toUpperCase()
+            const sha = sha512().update(payload).digest("hex").toUpperCase()
 
             /*  compare message digests  */
             if (sha !== header["DSIG-Payload-Digest"].replace(/-/g, ""))

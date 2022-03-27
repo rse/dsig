@@ -116,11 +116,11 @@ the public key (hard-coded into the application update procedure).
 ```sh
 # generate a private/public key pair
 $ dsig keygen \
-    --user-name "Dr. Ralf S. Engelschall" \
-    --user-email rse@engelschall.com \
-    --pass-phrase secure \
+    --user-name   "Dr. Ralf S. Engelschall" \
+    --user-email  rse@engelschall.com \
+    --pass-phrase sample \
     --private-key sample.prv \
-    --public-key sample.pub
+    --public-key  sample.pub
 $ cat sample.prv sample.pub
 -----BEGIN PGP PRIVATE KEY BLOCK-----
 Version: DSIG-1.0 OpenPGP Private Key
@@ -161,7 +161,7 @@ rCC6ipOA7m7ZPVzo434fYTtICQ==
 ```sh
 # determine fingerprint of public key
 $ dsig fingerprint \
-    --public-key sample.pub \
+    --public-key  sample.pub \
     --fingerprint sample.fpr
 $ cat sample.fpr
 4FC0-9DEF-4E4D-8BCE-46F7-3FD0-0B96-30C3-CB00-726A
@@ -181,17 +181,19 @@ $ zip sample.zip sample.txt
 
 ```sh
 # generate a sample meta information
-$ (echo "Name: Sample"; echo "Version: 1.0.0"; echo "Released: 2020-01-01") >sample.inf
+$ ( echo "Name: Sample"; \
+    echo "Version: 1.0.0"; \
+    echo "Released: 2020-01-01" ) >sample.inf
 ```
 
 ```sh
 # generate digital signature for distribution archive
 $ dsig sign \
-    --payload sample.zip \
-    --signature sample.sig \
-    --pass-phrase secure \
+    --payload     sample.zip \
+    --signature   sample.sig \
+    --pass-phrase sample \
     --private-key sample.prv \
-    --meta-info sample.inf
+    --meta-info   sample.inf
 $ cat sample.sig
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
@@ -220,9 +222,9 @@ Jam53esE
 ```sh
 # verify digital signature of distribution archive
 $ dsig verify \
-    --payload sample.zip \
-    --signature sample.sig \
-    --public-key sample.pub \
+    --payload     sample.zip \
+    --signature   sample.sig \
+    --public-key  sample.pub \
     --fingerprint sample.fpr
 ```
 
@@ -234,21 +236,23 @@ procedure.
 
 ```sh
 # generate a sample license
-$ (echo "Name: Sample"; echo "Version: 1.0.*"; \
-  echo "Issued: 2020-01-01"; echo "Expires: 2020-12-31") >sample.txt
+$ ( echo "Name: Sample"; \
+    echo "Version: 1.0.*"; \
+    echo "Issued: 2020-01-01"; \
+    echo "Expires: 2020-12-31" ) >sample.txt
 $ dsig sign \
-	--signature sample.lic \
-	--pass-phrase secure \
+	--signature   sample.lic \
+	--pass-phrase sample \
 	--private-key sample.prv \
-	--meta-info sample.txt
+	--meta-info   sample.txt
 $ cat sample.lic
 ```
 
 ```sh
 # verify digital signature of license
 $ dsig verify \
-    --signature sample.lic \
-    --public-key sample.pub \
+    --signature   sample.lic \
+    --public-key  sample.pub \
     --fingerprint sample.fpr
 ```
 

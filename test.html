@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Sample</title>
+    </head>
+    <body>
+        <script src="./dst/dsig-api.js"></script>
+        <script>
+            (async () => {
+                const pub =
+                    "-----BEGIN PGP PUBLIC KEY BLOCK-----\n" +
+                    "Version: DSIG-1.0 OpenPGP Public Key\n" +
+                    "Comment: Dr. Ralf S. Engelschall <rse@engelschall.com> [129C-7206-7072-0C85-9A30-34DC-7102-3921-3426-3327]\n" +
+                    "\n" +
+                    "xjMEYj+nCBYJKwYBBAHaRw8BAQdAaIXDKBF8tBro9RdrkjzpI3izVcWpaZ9r\n" +
+                    "/J7dVFzdBwDNLURyLiBSYWxmIFMuIEVuZ2Vsc2NoYWxsIDxyc2VAZW5nZWxz\n" +
+                    "Y2hhbGwuY29tPsKMBBAWCgAdBQJiP6cIBAsJBwgDFQgKBBYAAgECGQECGwMC\n" +
+                    "HgEAIQkQcQI5ITQmMycWIQQSnHIGcHIMhZowNNxxAjkhNCYzJyZhAQCTPHGe\n" +
+                    "LCQzWatm3BMUvDhLs2+kg9ngtF75CD13LVb9QgD/RRLfKpOYftLWiRJw4vxs\n" +
+                    "nhR1R3UhyGKmuvdlKbrGUAjOOARiP6cIEgorBgEEAZdVAQUBAQdAqnXZ/vUO\n" +
+                    "stDvyCrmO0RMBD62/P+QX5SMelQkGkce0E8DAQgHwngEGBYIAAkFAmI/pwgC\n" +
+                    "GwwAIQkQcQI5ITQmMycWIQQSnHIGcHIMhZowNNxxAjkhNCYzJwURAPwOqL6g\n" +
+                    "0VWPsvOfw3MQBpRR8+1TBuTZb5FVtjTEGcwF9gD/biiM5AU0qm87PO/4d8Ou\n" +
+                    "bBd9e1WHhbt1sjdXxJsXfAQ=\n" +
+                    "=wiW5\n" +
+                    "-----END PGP PUBLIC KEY BLOCK-----\n"
+                const fp =
+                    "129C-7206-7072-0C85-9A30-34DC-7102-3921-3426-3327"
+                const lic =
+                    "-----BEGIN PGP SIGNED MESSAGE-----\n" +
+                    "Hash: SHA512\n" +
+                    "\n" +
+                    "DSIG-Issued: 2022-03-26T23:51:37.663Z\n" +
+                    "\n" +
+                    "Name: Sample\n" +
+                    "Version: 1.0.*\n" +
+                    "Issued: 2020-01-01\n" +
+                    "Expires: 2020-12-31\n" +
+                    "\n" +
+                    "-----BEGIN PGP SIGNATURE-----\n" +
+                    "Version: DSIG-1.0 OpenPGP Digital Signature\n" +
+                    "Comment: Dr. Ralf S. Engelschall <rse@engelschall.com> [129C-7206-7072-0C85-9A30-34DC-7102-3921-3426-3327]\n" +
+                    "\n" +
+                    "wnUEARYKAAYFAmI/pwkAIQkQcQI5ITQmMycWIQQSnHIGcHIMhZowNNxxAjkh\n" +
+                    "NCYzJ+0LAQDYI9zMeFLw74N6bkKH2vmte+7ZAybWaTj/Owuhs+YpCQEAklx9\n" +
+                    "a0dBSWuh9qfL+PI+uV13GxB7pdytpQfq4FrZFgk=\n" +
+                    "=dBTV\n" +
+                    "-----END PGP SIGNATURE-----\n"
+                const metaInfo = await DSIG.verify(null, lic, pub, fp)
+                console.log(metaInfo)
+            })()
+        </script>
+    </body>
+</html>

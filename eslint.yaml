@@ -1,6 +1,6 @@
 ##
 ##  DSIG -- Digital Signature with OpenPGP
-##  Copyright (c) 2015-2021 Dr. Ralf S. Engelschall <rse@engelschall.com>
+##  Copyright (c) 2015-2022 Dr. Ralf S. Engelschall <rse@engelschall.com>
 ##  Licensed under LGPL 3.0 <https://spdx.org/licenses/LGPL-3.0-only>
 ##
 
@@ -11,7 +11,7 @@ extends:
     - eslint-config-standard
 
 parserOptions:
-    ecmaVersion: 8
+    ecmaVersion: 12
     sourceType:  module
     ecmaFeatures:
         jsx:     false

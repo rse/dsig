@@ -1,6 +1,6 @@
 /*
 **  DSIG -- Digital Signature with OpenPGP
-**  Copyright (c) 2015-2021 Dr. Ralf S. Engelschall <rse@engelschall.com>
+**  Copyright (c) 2015-2022 Dr. Ralf S. Engelschall <rse@engelschall.com>
 **
 **  Permission is hereby granted, free of charge, to any person obtaining
 **  a copy of this software and associated documentation files (the
@@ -36,7 +36,7 @@ export default {
     plugins: [
         resolve({ browser: true }),
         commonjs(),
-        replace({ "__dirname": "\".\"" }),
+        replace({ "__dirname": "\".\"", preventAssignment: true }),
         json(),
         babel({
 		    babelrc: false,

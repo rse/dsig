@@ -49,6 +49,10 @@ page](src/dsig-cli.md#example) for an example how to prepare
 public/private key pair and fingerprint, and then sign and verify an
 application distribution archive or an application runtime license.
 
+A corresponding standalone [Bourne shell script](./test.sh) and
+[equivalent Web page](./test.html) can be used for test-driving DSIG,
+too.
+
 Usage
 -----
 

@@ -23,9 +23,9 @@ application license files and application distribution archive files.
 
 The crux of DSIG is:
 
-1. It is based on [OpenPGP.js](https://openpgpjs.org/) and as a
-   consequence is a plain JavaScript solution which does not require an
-   installed [GnuPG](https://gnupg.org/) and its native `gpg` command
+1. It is based on [OpenPGP.js](https://openpgpjs.org/), and as a
+   consequence, it is a plain JavaScript solution which does not require
+   an installed [GnuPG](https://gnupg.org/) and its native `gpg` command
    and works in both [Node.js](https://nodejs.org/) and the Browser.
 
 2. The private key, public key, fingerprint and signature
@@ -44,14 +44,12 @@ $ npm install [-g] dsig
 Example
 -------
 
-See the Example section of the [Unix manual
-page](src/dsig-cli.md#example) for an example how to prepare
-public/private key pair and fingerprint, and then sign and verify an
-application distribution archive or an application runtime license.
-
-A corresponding standalone [Bourne shell script](./test.sh) and
-[equivalent Web page](./test.html) can be used for test-driving DSIG,
-too.
+See the Example section of the [Unix manual page](src/dsig-cli.md#example)
+for an example how to prepare public/private key pair and fingerprint,
+and then sign and verify an application distribution archive or an
+application runtime license. A corresponding standalone
+[Bourne shell script](./test.sh) and [equivalent Web page](./test.html)
+can be used for test-driving DSIG, too.
 
 Usage
 -----

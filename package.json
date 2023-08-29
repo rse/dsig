@@ -21,7 +21,7 @@
         "dsig":                            "./src/dsig-cli.js"
     },
     "dependencies": {
-        "openpgp":                         "5.2.1",
+        "openpgp":                         "5.10.1",
         "hash.js":                         "1.1.7",
         "yargs":                           "17.4.0",
         "cli-io":                          "0.9.8"
